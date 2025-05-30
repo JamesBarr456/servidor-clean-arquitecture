@@ -1,0 +1,14 @@
+node_modules/
+build/
+
+# Logs
+.DS_Store
+
+
+logs/
+
+
+.env
+
+/mongo
+/postgres
