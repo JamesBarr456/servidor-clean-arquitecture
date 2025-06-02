@@ -2,6 +2,7 @@
 import express, { Application } from "express";
 
 import { envs } from "../config/plugins/envs.plugins";
+import authRouter from "../interfaces/http/routes/auth.routes";
 
 
 
@@ -27,7 +28,7 @@ export class Server {
 
   private loadRoutes(): void {
     // Acá van tus rutas
-    this.app.get("/", (req, res) => res.send("API Ecommerce Zapatillas"));
+    this.app.use("/api/auth", authRouter);
   }
 
   public async start(): Promise<void> {
