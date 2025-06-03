@@ -1,7 +1,7 @@
-import { Server } from "./application/server";
+import { AppRoutes } from "./presentation/routes";
+import { MongoDatabase } from "./data/mongo";
+import { Server } from "./presentation/server";
 import { envs } from "./config/plugins/envs.plugins";
-import { MongoConnection } from "./infraestructure/database/config/mongo-connection.config";
-
 
 (async() => {
     main();
@@ -9,14 +9,20 @@ import { MongoConnection } from "./infraestructure/database/config/mongo-connect
   
   
   async function main(){
-    const server = new Server()
+
     
-    await MongoConnection.connect({
-      mongoUrl: envs.MONGO_URL,
-      dbName: envs.MONGO_DB_NAME,
-    })
+  //    await MongoDatabase.connect({
+  //   mongoUrl: envs.MONGO_URL,
+  //   dbName: envs.MONGO_DB_NAME,
+  // });
     
-    server.start();
+   
+  const server = new Server({
+    port: envs.PORT,
+    public_path: envs.PUBLIC_PATH,
+    routes: AppRoutes.routes,
+  });
+  server.start();
   }
   
   
