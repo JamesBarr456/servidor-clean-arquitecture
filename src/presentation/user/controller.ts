@@ -1,5 +1,8 @@
 import { Request, Response } from "express";
 
+import { MongoUserRepository } from "../../infraestructure/datasource/repositories/mongo-user-repository";
+import { RegisterUser } from "../../domain/use-cases/register-user.usecases";
+
 // Es el encargado de dar respuestas al cliente
 export class AuthController {
 
@@ -12,9 +15,16 @@ constructor() {}
   }
 
   // Método para manejar el registro de un nuevo usuario
-  register(req: Request, res:Response) {
-    // Lógica para manejar el registro
-    res.send('Registration successful');
+  async register(req: Request, res:Response) {
+  const userRepository = new MongoUserRepository();
+    const registerUser = new RegisterUser(userRepository);
+
+    try {
+      const user = await registerUser.execute(req.body);
+      res.status(201).json({ message: "User registered", user });
+    } catch (err: any) {
+      res.status(400).json({ error: err.message });
+    }
   }
 
   // Método para validar el correo electrónico

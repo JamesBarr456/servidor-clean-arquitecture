@@ -6,36 +6,29 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  last_name: {
-    type: String,
-    required: true,
-  },
-  dni: {
-    type: String,
-    required: true,
-  },
-  number_phone: {
-    type: String,
-    default: "",
-  },
   email: {
     type: String,
-    required: true,
+    required: [ true, 'Email is required' ],
     unique: true,
+  },
+   emailValidated: {
+    type: Boolean,
+    default: false,
   },
   password: {
     type: String,
-    required: true,
+    required: [true, 'Password is required'],
   },
   avatar: {
     type: String,
     default: "",
   },
-  status: {
-    type: String,
-    enum: ["admin", "user"],
-    default: "user",
-  },
+  role: {
+    type: [String],
+    default: ['USER_ROLE'],
+    enum: ['ADMIN_ROLE','USER_ROLE']
+  }
+  ,
   created_at: {
     type: Date,
     default: Date.now,
@@ -46,13 +39,13 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-userSchema.pre("save", async function (next) {
-  try {
-    const hashedPassword = await bcrypt.hash(this.password ?? "", 10);
-    this.password = hashedPassword;
-    next();
-  } catch (error) {
-    console.log(error);
-  }
-});
-export const User = mongoose.model("User", userSchema);
+// userSchema.pre("save", async function (next) {
+//   try {
+//     const hashedPassword = await bcrypt.hash(this.password ?? "", 10);
+//     this.password = hashedPassword;
+//     next();
+//   } catch (error) {
+//     console.log(error);
+//   }
+// });
+export const UserModel = mongoose.model("User", userSchema);
